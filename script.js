@@ -1,14 +1,44 @@
-$(function() {
-    var allstories;
-    $.ajax({
+var pages = {
+    top: {
         url: "https://hacker-news.firebaseio.com/v0/topstories.json",
-        success: function(data) {
-            allstories = data;
-            console.log(allstories);
-            fetchStories(allstories);
-        }
-    });
+        ids: null,
+    },
+    new: {
+        url: "https://hacker-news.firebaseio.com/v0/newstories.json",
+        ids: null,
+    },
+    best: {
+        url: "https://hacker-news.firebaseio.com/v0/beststories.json",
+        ids: null,
+    },
+    ask: {
+        url: " https://hacker-news.firebaseio.com/v0/askstories.json",
+        ids: null,
+    },
+    show: {
+        url: " https://hacker-news.firebaseio.com/v0/showstories.json",
+        ids: null,
+    },
+    jobs: {
+        url: "https://hacker-news.firebaseio.com/v0/jobstories.json",
+        ids: null,
+    },
+};
+
+$(function() {
+    getStoryIDs("TOP");
+    fetchStories(window.pages.top.ids);
 });
+
+function getStoryIDs(page) {
+    var pageObj = pages[page.toLowerCase()];
+    $.ajax({
+        url: pageObj.url,
+        success: function(ids) {
+            pageObj.ids = ids;
+        }
+    })
+}
 
 // function fetchStories(stories) {
 //     stories.forEach(element => {
