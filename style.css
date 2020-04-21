@@ -80,3 +80,11 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+#load_more {
+    background-color: #86C232
+}
+
+#load_more p {
+    color: #ffffff;
+}

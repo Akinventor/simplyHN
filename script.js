@@ -1,4 +1,6 @@
 var pages = {
+    pageCount: 0,
+    storyInterval: 30,
     top: {
         url: "https://hacker-news.firebaseio.com/v0/topstories.json",
         ids: null,
@@ -27,45 +29,50 @@ var pages = {
 
 $(function() {
     getStoryIDs("TOP");
-    fetchStories(window.pages.top.ids);
+    $("#load_more").click(function() {
+        fetchStories(pages.top.ids);
+    });
 });
+
 
 function getStoryIDs(page) {
     var pageObj = pages[page.toLowerCase()];
     $.ajax({
         url: pageObj.url,
-        success: function(ids) {
-            pageObj.ids = ids;
+        success: function(data) {
+            pageObj.ids = data;
+            fetchStories(pageObj.ids);
         }
     })
 }
 
-// function fetchStories(stories) {
-//     stories.forEach(element => {
-//         var storyURL = "https://hacker-news.firebaseio.com/v0/item/" + element + ".json";
-//         console.log(storyURL);
-//         $.ajax({
-//             dataType: "json",
-//             url: storyURL,
-//             success: function(result) {
-//                 renderStory(result, storyURL);
-//             }
-//         });
-//     });
-// }
+function fetchStories(stories) {
+    stories.slice(pages.storyInterval * pages.pageCount, pages.storyInterval * (pages.pageCount + 1)).forEach(element => {
+        var storyURL = "https://hacker-news.firebaseio.com/v0/item/" + element + ".json";
+        console.log(storyURL);
+        $.ajax({
+            dataType: "json",
+            url: storyURL,
+            success: function(result) {
+                renderStory(result, storyURL);
+            }
+        });
+    });
+    pages.pageCount += 1;
+}
 
 // This function is for testing, so I don't make a ton of API calls.
-function fetchStories(stories) {
-    var storyURL = "https://hacker-news.firebaseio.com/v0/item/" + stories[0] + ".json";
-    console.log(storyURL);
-    $.ajax({
-        dataType: "json",
-        url: storyURL,
-        success: function(result) {
-            renderStory(result);
-        }
-    });
-}
+// function fetchStories(stories) {
+//     var storyURL = "https://hacker-news.firebaseio.com/v0/item/" + stories[0] + ".json";
+//     console.log(storyURL);
+//     $.ajax({
+//         dataType: "json",
+//         url: storyURL,
+//         success: function(result) {
+//             renderStory(result);
+//         }
+//     });
+// }
 
 function renderStory(storyData) {
     var story = "<div class=\"story_container\"><div class=\"story_data\"><div class=\"story_title\"><a class=\"story_link\" href=\"" + storyData.url + "\"><span>" + storyData.title + "</span></a> <a class=\"story_discussion\" href=\"https://news.ycombinator.com/item?id=" + storyData.id + "\"><span>(Discussion)</span></a></div><div class=\"story_meta\"><span>Points: " + storyData.score + "</span><span class=\"meta_seperator\"> | </span><span><a href=\"https://news.ycombinator.com/user?id=" + storyData.by+ "\"><span>By " + storyData.by + "</span></a></span><span class=\"meta_seperator\"> | </span><span>" + timeSince(new Date(storyData.time * 1000)) + "</span></div></div></div>"
