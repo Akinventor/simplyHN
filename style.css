@@ -1,5 +1,82 @@
-main {
-    max-width: 38rem;
-    padding: 2rem;
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
     margin: auto;
+    background: #222629;
+}
+
+.header {
+    background: #86C232;
+    overflow: hidden;
+    padding: 10px 10px;
+}
+
+.header a {
+    float: left;
+    color: #474B4F;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 25px;
+}
+
+.header #logo, .header #logo:active {
+    float: left;
+    font-size: 25px;
+    font-weight: 900;
+    color: #474B4F;
+}
+
+.header a.active, .header a:hover  {
+    color: white;
+    text-decoration: none;
+}
+
+.header_right {
+    float: left;
+    padding-left: 25px;
+}
+
+/* This one section is taken directly from w3schools */
+@media screen and (max-width: 500px) {
+    .header a {
+      float: none;
+      display: block;
+      text-align: left;
+    }
+    .header-right {
+      float: none;
+    }
   }
+
+.story_container {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    color: #474B4F;
+}
+
+.story_title {
+    width: 100%;
+    position: relative;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.story_meta {
+    font-size: 11px;
+    color: #DBDBCE;
+}
+
+a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+a:hover {
+    text-decoration: underline;
+}
