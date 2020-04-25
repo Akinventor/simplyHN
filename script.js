@@ -1,5 +1,9 @@
 var pages = {
+    // This variables sets the first page, then is changed to whatever the current page is.
+    currentPage: "TOP",
+    // This tracks where the JS is in the array of stories.
     pageCount: 0,
+    // This is how many stories show up on the first page.
     storyInterval: 30,
     top: {
         url: "https://hacker-news.firebaseio.com/v0/topstories.json",
@@ -28,12 +32,56 @@ var pages = {
 };
 
 $(function() {
-    getStoryIDs("TOP");
+    // This gets and renders stories.
+    getStoryIDs(pages.currentPage);
+
+    // This function loads more stories.
     $("#load_more").click(function() {
-        fetchStories(pages.top.ids);
+        fetchStories(pages[pages.currentPage.toLowerCase()].ids);
     });
+
+    // Menu
+    $("#logo").click(function() {
+        changePages("TOP")
+    });
+    $("#new_link").click(function() {
+        changePages("NEW");
+    });
+    $("#ask_link").click(function() {
+        changePages("ASK");
+    });
+    $("#show_link").click(function() {
+        changePages("SHOW")
+    });
+    $("#jobs_link").click(function() {
+        changePages("JOBS")
+    });
+
+    $(".story_discussion").click(function() {
+        console.log(this.id);
+    })
 });
 
+function changePages(newPage)
+{
+    pages.currentPage = newPage;
+    pages.pageCount = 0;
+    $("#allstories").empty();
+    getStoryIDs(pages.currentPage);
+}
+
+function loadDiscussion(ids) {
+    ids.foreach(commentID => {
+        var commentURL = "https://hacker-news.firebaseio.com/v0/item/" + commentID + ".json";
+        $.ajax({
+            dataType: "json",
+            url: commentURL,
+            success: function(result) {
+                console.log(result.text);
+            }
+        });
+    });
+}
 
 function getStoryIDs(page) {
     var pageObj = pages[page.toLowerCase()];
@@ -47,35 +95,30 @@ function getStoryIDs(page) {
 }
 
 function fetchStories(stories) {
-    stories.slice(pages.storyInterval * pages.pageCount, pages.storyInterval * (pages.pageCount + 1)).forEach(element => {
-        var storyURL = "https://hacker-news.firebaseio.com/v0/item/" + element + ".json";
-        console.log(storyURL);
+    stories.slice(pages.storyInterval * pages.pageCount, pages.storyInterval * (pages.pageCount + 1)).forEach(storyID => {
+        var storyURL = "https://hacker-news.firebaseio.com/v0/item/" + storyID + ".json";
         $.ajax({
             dataType: "json",
             url: storyURL,
             success: function(result) {
-                renderStory(result, storyURL);
+                renderStory(result);
             }
         });
     });
     pages.pageCount += 1;
 }
 
-// This function is for testing, so I don't make a ton of API calls.
-// function fetchStories(stories) {
-//     var storyURL = "https://hacker-news.firebaseio.com/v0/item/" + stories[0] + ".json";
-//     console.log(storyURL);
-//     $.ajax({
-//         dataType: "json",
-//         url: storyURL,
-//         success: function(result) {
-//             renderStory(result);
-//         }
-//     });
-// }
-
 function renderStory(storyData) {
-    var story = "<div class=\"story_container\"><div class=\"story_data\"><div class=\"story_title\"><a class=\"story_link\" href=\"" + storyData.url + "\"><span>" + storyData.title + "</span></a> <a class=\"story_discussion\" href=\"https://news.ycombinator.com/item?id=" + storyData.id + "\"><span>(Discussion)</span></a></div><div class=\"story_meta\"><span>Points: " + storyData.score + "</span><span class=\"meta_seperator\"> | </span><span><a href=\"https://news.ycombinator.com/user?id=" + storyData.by+ "\"><span>By " + storyData.by + "</span></a></span><span class=\"meta_seperator\"> | </span><span>" + timeSince(new Date(storyData.time * 1000)) + "</span></div></div></div>"
+    var storyURL;
+    if (storyData.url != null)
+    {
+        storyURL = "https://outline.com/" + storyData.url;
+    }
+    else
+    {
+        storyURL = "https://news.ycombinator.com/item?id=" + storyData.id;
+    }
+    var story = "<div class=\"story_container\" id=" + storyData.id + "><div class=\"story_data\"><div class=\"story_title\"><a class=\"story_link\" href=\"" + storyURL + "\"><span>" + storyData.title + "</span></a> <a class=\"story_discussion\" href=\"https://news.ycombinator.com/item?id=" + storyData.id + "\"><span>(Discussion)</span></a></div><div class=\"story_meta\"><span>Points: " + storyData.score + "</span><span class=\"meta_seperator\"> | </span><span><a href=\"https://news.ycombinator.com/user?id=" + storyData.by+ "\"><span>By " + storyData.by + "</span></a></span><span class=\"meta_seperator\"> | </span><span>" + timeSince(new Date(storyData.time * 1000)) + "</span></div></div></div>"
     $("#allstories").append(story);
 }
 

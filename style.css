@@ -31,7 +31,7 @@ body {
     color: #474B4F;
 }
 
-.header a.active, .header a:hover  {
+.header a.active, .header a:hover, .header #logo:hover {
     color: white;
     text-decoration: none;
 }
