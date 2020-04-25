@@ -6,6 +6,8 @@ var pages = {
     // This is how many stories show up on the first page.
     storyInterval: 30,
 
+    outline: true,
+
     top: {
         url: "https://hacker-news.firebaseio.com/v0/topstories.json",
         ids: null,
@@ -36,16 +38,21 @@ $(function() {
     // This gets and renders stories.
     getStoryIDs(pages.currentPage);
 
-    // This function loads more stories.
+    // Fallback function loads more stories.
     $("#load_more").click(function() {
         fetchStories(pages[pages.currentPage.toLowerCase()].ids);
     });
 
+    // Auto Loads more on Scroll
     $(window).scroll(function() {
-        if($(window).scrollTop() + $(window).height() == $(document).height()) {
+        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
             fetchStories(pages[pages.currentPage.toLowerCase()].ids);
         }
-     });
+    });
+
+    $('#outline').click(function() {
+        changePages(pages.currentPage);
+    });
 
     // Menu
     $("#logo").click(function() {
@@ -119,7 +126,14 @@ function renderStory(storyData) {
     var storyURL;
     if (storyData.url != null)
     {
-        storyURL = "https://outline.com/" + storyData.url;
+        if ($('#outline').is(":checked"))
+        {
+            storyURL = "https://outline.com/" + storyData.url;
+        }
+        else
+        {
+            storyURL = storyData.url;
+        }
     }
     else
     {
