@@ -126,7 +126,7 @@ function renderStory(storyData) {
     var storyURL;
     if (storyData.url != null)
     {
-        if ($('#outline').is(":checked"))
+        if ($('#outline').is(":checked") && pages.currentPage == "TOP" || pages.currentPage == "NEW")
         {
             storyURL = "https://outline.com/" + storyData.url;
         }
