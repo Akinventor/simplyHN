@@ -5,6 +5,7 @@ var pages = {
     pageCount: 0,
     // This is how many stories show up on the first page.
     storyInterval: 30,
+
     top: {
         url: "https://hacker-news.firebaseio.com/v0/topstories.json",
         ids: null,
@@ -39,6 +40,12 @@ $(function() {
     $("#load_more").click(function() {
         fetchStories(pages[pages.currentPage.toLowerCase()].ids);
     });
+
+    $(window).scroll(function() {
+        if($(window).scrollTop() + $(window).height() == $(document).height()) {
+            fetchStories(pages[pages.currentPage.toLowerCase()].ids);
+        }
+     });
 
     // Menu
     $("#logo").click(function() {
