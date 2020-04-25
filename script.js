@@ -118,7 +118,7 @@ function renderStory(storyData) {
     {
         storyURL = "https://news.ycombinator.com/item?id=" + storyData.id;
     }
-    var story = "<div class=\"story_container\" id=" + storyData.id + "><div class=\"story_data\"><div class=\"story_title\"><a class=\"story_link\" href=\"" + storyURL + "\"><span>" + storyData.title + "</span></a> <a class=\"story_discussion\" href=\"https://news.ycombinator.com/item?id=" + storyData.id + "\"><span>(Discussion)</span></a></div><div class=\"story_meta\"><span>Points: " + storyData.score + "</span><span class=\"meta_seperator\"> | </span><span><a href=\"https://news.ycombinator.com/user?id=" + storyData.by+ "\"><span>By " + storyData.by + "</span></a></span><span class=\"meta_seperator\"> | </span><span>" + timeSince(new Date(storyData.time * 1000)) + "</span></div></div></div>"
+    var story = "<div class=\"story_container\" id=" + storyData.id + "><div class=\"story_data\"><div class=\"story_title\"><a class=\"story_link\" href=\"" + storyURL + "\"><span>" + storyData.title + "</span></a> <a class=\"story_discussion\" href=\"https://news.ycombinator.com/item?id=" + storyData.id + "\"><span>(Discussion)</span></a></div><div class=\"story_meta\"><span>Points: " + storyData.score + "</span><span class=\"meta_seperator\"> | </span><span><a href=\"https://news.ycombinator.com/user?id=" + storyData.by+ "\"><span>By " + storyData.by + "</span></a></span><span class=\"meta_seperator\"> | </span><span>" + timeSince(storyData.time * 1000) + "</span></div></div></div>"
     $("#allstories").append(story);
 }
 
