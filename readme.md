@@ -12,4 +12,4 @@
     - Scaling
     - Probably A Lot Of Other Things
 
-## Github Page <https://akinventor.github.io/simplyHN/>
+## Github Page <https://hearnadam.github.io/simplyHN/>
